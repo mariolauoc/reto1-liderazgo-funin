@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma de Liderazgo Goleman | Reto 1 FUNIN - UOC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f5ff',
+              100: '#e5edff',
+              500: '#2563eb',
+              600: '#1d4ed8',
+              700: '#1e40af',
+              800: '#002f6c',
+              900: '#001a3e',
+            },
+            accent: {
+              teal: '#0d9488',
+              amber: '#d97706',
+              rose: '#e11d48',
+              purple: '#7c3aed'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    input[type=range] {
+      accent-color: #2563eb;
+    }
+    .card-shadow {
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-blue-100 selection:text-blue-900">
+
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm backdrop-blur-md bg-white/95">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-800 to-brand-500 flex items-center justify-center text-white font-bold text-lg shadow-md">
+            HD
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 uppercase tracking-wider">Reto 1 • Caso FUNIN</span>
+              <span class="text-xs text-slate-400 font-medium hidden sm:inline">Semestre 2025/26</span>
+            </div>
+            <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Laboratorio de Diagnóstico: Estilos de Liderazgo (Goleman)</h1>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnHelpModal" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 rounded-lg transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Guía Pedagógica</span>
+          </button>
+          <button id="btnQuickDemo" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 rounded-lg transition-all border border-brand-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <span>Cargar Caso Tipo</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-slate-100 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex space-x-2 sm:space-x-8 overflow-x-auto py-2 custom-scrollbar text-xs sm:text-sm font-medium" id="mainTabs">
+        <button class="nav-tab active-tab text-brand-600 border-b-2 border-brand-600 pb-2 px-1 flex items-center gap-2 whitespace-nowrap" data-tab="tab-input">
+          <span class="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">1</span>
+          Puntuación del Test
+        </button>
+        <button class="nav-tab text-slate-500 hover:text-slate-800 border-b-2 border-transparent pb-2 px-1 flex items-center gap-2 whitespace-nowrap" data-tab="tab-radar">
+          <span class="w-5 h-5 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center text-xs font-bold">2</span>
+          Radar y Diagnóstico
+        </button>
+        <button class="nav-tab text-slate-500 hover:text-slate-800 border-b-2 border-transparent pb-2 px-1 flex items-center gap-2 whitespace-nowrap" data-tab="tab-clima">
+          <span class="w-5 h-5 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center text-xs font-bold">3</span>
+          Impacto en el Clima (6 Impulsores)
+        </button>
+        <button class="nav-tab text-slate-500 hover:text-slate-800 border-b-2 border-transparent pb-2 px-1 flex items-center gap-2 whitespace-nowrap" data-tab="tab-funin">
+          <span class="w-5 h-5 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center text-xs font-bold">4</span>
+          Aplicación Caso FUNIN
+        </button>
+        <button class="nav-tab text-slate-500 hover:text-slate-800 border-b-2 border-transparent pb-2 px-1 flex items-center gap-2 whitespace-nowrap" data-tab="tab-informe">
+          <span class="w-5 h-5 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center text-xs font-bold">5</span>
+          Síntesis para Memoria Reto 1
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ================= TAB 1: ENTRADA DE DATOS ================= -->
+    <section id="tab-input" class="tab-content block space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 card-shadow">
+        <div class="sm:flex sm:items-center sm:justify-between border-b border-slate-100 pb-5">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Introduce tus puntuaciones obtenidas en el Test de Liderazgo</h2>
+            <p class="text-sm text-slate-500 mt-1">
+              Ingresa los resultados del cuestionario realizado en el aula Moodle o ajusta los deslizadores según tu perfil evaluado.
+            </p>
+          </div>
+          <div class="mt-4 sm:mt-0 flex gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-800 text-xs rounded-full border border-amber-200">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+              Escala de 0 a 100%
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+          
+          <!-- Coercitivo -->
+          <div class="p-4 rounded-xl border border-slate-200 hover:border-red-300 bg-slate-50/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-md border border-rose-100">Coercitivo</span>
+                <span id="val-coercitivo" class="text-lg font-bold text-slate-800">42%</span>
+              </div>
+              <p class="text-xs text-slate-500 italic mb-3">«Haz lo que te digo» • Exige conformidad inmediata</p>
+              <p class="text-xs text-slate-600 line-clamp-2 mb-4">Útil en crisis o con empleados problemáticos. En exceso erosiona la flexibilidad y motivación.</p>
+            </div>
+            <div>
+              <input type="range" id="input-coercitivo" min="0" max="100" value="42" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>Bajo (0%)</span>
+                <span>Medio (50%)</span>
+                <span>Dominante (100%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Orientativo -->
+          <div class="p-4 rounded-xl border border-slate-200 hover:border-blue-300 bg-slate-50/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">Orientativo / Visionario</span>
+                <span id="val-orientativo" class="text-lg font-bold text-slate-800">85%</span>
+              </div>
+              <p class="text-xs text-slate-500 italic mb-3">«Ven conmigo» • Moviliza hacia una visión clara</p>
+              <p class="text-xs text-slate-600 line-clamp-2 mb-4">El más fuertemente positivo sobre el clima general (.54). Brinda propósito sin microgestión.</p>
+            </div>
+            <div>
+              <input type="range" id="input-orientativo" min="0" max="100" value="85" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>Bajo (0%)</span>
+                <span>Medio (50%)</span>
+                <span>Dominante (100%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Afiliativo -->
+          <div class="p-4 rounded-xl border border-slate-200 hover:border-emerald-300 bg-slate-50/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-100">Afiliativo</span>
+                <span id="val-afiliativo" class="text-lg font-bold text-slate-800">78%</span>
+              </div>
+              <p class="text-xs text-slate-500 italic mb-3">«Las personas son lo primero» • Vínculos y armonía</p>
+              <p class="text-xs text-slate-600 line-clamp-2 mb-4">Sana desavenencias y cuida el bienestar emocional. Clave para equipos desgastados o con tensión.</p>
+            </div>
+            <div>
+              <input type="range" id="input-afiliativo" min="0" max="100" value="78" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>Bajo (0%)</span>
+                <span>Medio (50%)</span>
+                <span>Dominante (100%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Democrático -->
+          <div class="p-4 rounded-xl border border-slate-200 hover:border-purple-300 bg-slate-50/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2.5 py-0.5 rounded-md border border-purple-100">Democrático / Participativo</span>
+                <span id="val-democratico" class="text-lg font-bold text-slate-800">72%</span>
+              </div>
+              <p class="text-xs text-slate-500 italic mb-3">«¿Qué piensas tú?» • Forja consenso participativo</p>
+              <p class="text-xs text-slate-600 line-clamp-2 mb-4">Empodera al equipo y aporta flexibilidad. Puede generar lentitud si se abusa en momentos de urgencia.</p>
+            </div>
+            <div>
+              <input type="range" id="input-democratico" min="0" max="100" value="72" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>Bajo (0%)</span>
+                <span>Medio (50%)</span>
+                <span>Dominante (100%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ejemplar -->
+          <div class="p-4 rounded-xl border border-slate-200 hover:border-amber-300 bg-slate-50/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-100">Ejemplar / Marcapasos</span>
+                <span id="val-ejemplar" class="text-lg font-bold text-slate-800">65%</span>
+              </div>
+              <p class="text-xs text-slate-500 italic mb-3">«Haz como yo, ahora» • Altos estándares técnicos</p>
+              <p class="text-xs text-slate-600 line-clamp-2 mb-4">Funciona con expertos autónomos, pero si se vuelve microgestión destruye el clima organizacional (-.25).</p>
+            </div>
+            <div>
+              <input type="range" id="input-ejemplar" min="0" max="100" value="65" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>Bajo (0%)</span>
+                <span>Medio (50%)</span>
+                <span>Dominante (100%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formativo -->
+          <div class="p-4 rounded-xl border border-slate-200 hover:border-teal-300 bg-slate-50/50 transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-600 bg-teal-50 px-2.5 py-0.5 rounded-md border border-teal-100">Formativo / Coach</span>
+                <span id="val-formativo" class="text-lg font-bold text-slate-800">80%</span>
+              </div>
+              <p class="text-xs text-slate-500 italic mb-3">«Intenta esto» • Desarrollo de personas a futuro</p>
+              <p class="text-xs text-slate-600 line-clamp-2 mb-4">Ayuda al equipo a identificar fortalezas. Es el estilo menos usado habitualmente pero con alto impacto positivo (.42).</p>
+            </div>
+            <div>
+              <input type="range" id="input-formativo" min="0" max="100" value="80" class="w-full h-2 bg-slate-200 rounded-lg cursor-pointer">
+              <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                <span>Bajo (0%)</span>
+                <span>Medio (50%)</span>
+                <span>Dominante (100%)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2 text-xs">
+            <span class="text-slate-500 font-medium">Perfiles preconfigurados para explorar:</span>
+            <button class="preset-btn px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition" data-preset="resonante">Líder Resonante Multiestilo</button>
+            <button class="preset-btn px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition" data-preset="tecnico">Promoción Técnica (Riesgo Ejemplar)</button>
+            <button class="preset-btn px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md transition" data-preset="protector">Afiliativo Puro (Riesgo de Claridad)</button>
+          </div>
+          <button id="btnIrDiagnostico" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition shadow-md">
+            <span>Ver Diagnóstico y Gráfico Radar</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: RADAR Y DIAGNÓSTICO ================= -->
+    <section id="tab-radar" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Radar Visualization Column -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 card-shadow flex flex-col">
+          <div class="flex justify-between items-center border-b border-slate-100 pb-4 mb-4">
+            <div>
+              <h2 class="text-lg font-bold text-slate-900">Mapeo de tu Repertorio de Liderazgo</h2>
+              <p class="text-xs text-slate-500">Comparativa de tu perfil frente al ideal de «Líder Resonante Multiestilo»</p>
+            </div>
+            <span id="badgeDominancia" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-brand-700">
+              Orientativo Dominante
+            </span>
+          </div>
+          
+          <div class="relative flex-1 flex items-center justify-center min-h-[340px]">
+            <canvas id="radarChart"></canvas>
+          </div>
+
+          <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3 text-center">
+            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Estilos Resonantes (Clima +)</span>
+              <span id="kpi-resonantes" class="text-lg font-bold text-emerald-600">78.8%</span>
+              <span class="text-[10px] text-slate-500 block">Orientativo, Afiliativo, Dem., Form.</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Estilos de Riesgo Clima (-)</span>
+              <span id="kpi-disonantes" class="text-lg font-bold text-amber-600">53.5%</span>
+              <span class="text-[10px] text-slate-500 block">Coercitivo y Ejemplar</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interpretive Cards Column -->
+        <div class="lg:col-span-5 space-y-4 flex flex-col justify-between">
+          
+          <!-- Predominant Style Card -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 card-shadow">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 text-brand-600 flex items-center justify-center font-bold text-sm">★</div>
+              <h3 class="text-sm font-bold text-slate-900">Tu Estilo Predominante</h3>
+            </div>
+            <div id="card-predominante" class="text-xs text-slate-600 space-y-2">
+              <p class="font-semibold text-slate-800 text-sm" id="txt-predominante-title">Orientativo (85%)</p>
+              <p id="txt-predominante-desc">Movilizas a las personas tras una visión estratégica. Eres idóneo para marcar un nuevo rumbo al ascender a responsable del equipo en FUNIN, articulando por qué su misión de inclusión social trasciende las urgencias operativas.</p>
+            </div>
+          </div>
+
+          <!-- Repertory Flexibility Card (Golf Clubs) -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 card-shadow">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm">⛳</div>
+              <h3 class="text-sm font-bold text-slate-900">Metáfora de Goleman: «La Bolsa de Palos»</h3>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Goleman demuestra que los líderes de más alto rendimiento dominan <strong>4 o más estilos</strong> (especialmente Orientativo, Democrático, Afiliativo y Formativo) y los alternan con fluidez según el tiro requerido. No te quedes atrapado en tu estilo natural.
+            </p>
+            <div id="tagRepertorio" class="mt-3 flex flex-wrap gap-1.5 text-[11px]">
+              <!-- Tags generated dynamically -->
+            </div>
+          </div>
+
+          <!-- Alert / Blindspot Card -->
+          <div class="bg-amber-50 p-5 rounded-2xl border border-amber-200 text-xs text-amber-900">
+            <div class="flex items-center gap-2 font-bold mb-1.5">
+              <svg class="w-4 h-4 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+              <span>Atención a la «Trampa del Ascenso Reciente»</span>
+            </div>
+            <p class="leading-relaxed">
+              Al haber sido compañero de equipo durante 10 años en Recursos Humanos, existe el riesgo de caer en el <em>Estilo Ejemplar</em> («hago el trabajo yo mismo porque sé cómo hacerlo rápido») o en un <em>Afiliativo excesivo</em> sin fijar estándares claros por miedo a la tensión.
+            </p>
+          </div>
+
+          <button id="btnIrClima" class="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-xl transition">
+            <span>Analizar Impacto en el Clima Organizacional</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: IMPACTO EN CLIMA ================= -->
+    <section id="tab-clima" class="tab-content hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 card-shadow">
+        <div class="border-b border-slate-100 pb-4 mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900">Simulación del Impacto en los 6 Impulsores del Clima</h2>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Cálculo ponderado según la matriz empírica del estudio Hay/McBer y Daniel Goleman (HBR, 2000/2005)
+              </p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400 font-medium">Clima explica hasta</span>
+              <span class="text-base font-extrabold text-brand-600 block leading-tight">33% de los resultados</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- Climate Bar Chart -->
+          <div class="lg:col-span-7">
+            <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Puntuación Estimada de los 6 Impulsores</h3>
+            <div class="h-72 w-full relative">
+              <canvas id="climaBarChart"></canvas>
+            </div>
+            <div class="flex justify-between text-[11px] text-slate-400 mt-3 px-2">
+              <span>Rango negativo: Destruye el clima</span>
+              <span>Zona neutra</span>
+              <span class="text-emerald-600 font-medium">Rango positivo: Clima de alto rendimiento</span>
+            </div>
+          </div>
+
+          <!-- Drivers Breakdown Table -->
+          <div class="lg:col-span-5 space-y-3">
+            <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Desglose de los 6 Factores de Litwin y Stringer</h3>
+            
+            <div class="space-y-2 text-xs" id="climaDriversList">
+              <!-- Dynamically populated driver cards -->
+            </div>
+
+            <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-100 text-[11px] text-slate-600 leading-relaxed mt-3">
+              <strong>Para la memoria escrita (Pregunta 2.4):</strong> El estilo orientativo y el afiliativo tienen la correlación más alta en <em>Recompensas</em> (+.54 y +.48) y <em>Claridad</em> (+.44 y +.37), neutralizando el desbordamiento de tu equipo.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-8 pt-4 border-t border-slate-100 flex justify-end">
+          <button id="btnIrFunin" class="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-xl transition shadow-md">
+            <span>Llevar el Análisis al Caso FUNIN</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 4: CASO FUNIN ================= -->
+    <section id="tab-funin" class="tab-content hidden space-y-6">
+      
+      <!-- FUNIN Context header card -->
+      <div class="bg-gradient-to-r from-brand-900 to-slate-900 text-white p-6 rounded-2xl shadow-lg">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-200 text-xs font-semibold uppercase tracking-wider border border-blue-400/30">
+              Escenario Organizacional FUNIN
+            </span>
+            <h2 class="text-xl font-bold mt-2">Diagnóstico Situacional del Equipo de Proyectos</h2>
+            <p class="text-xs text-slate-300 max-w-2xl mt-1 leading-relaxed">
+              Ascendiste a Responsable de Personas tras 10 años como técnico. Lideras a 6 antiguos compañeros. Selecciona a cada perfil para evaluar la combinación óptima de estilos de liderazgo según las contingencias del caso.
+            </p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/10 text-center min-w-[140px]">
+            <span class="text-[11px] text-slate-300 block">Tu reto clave</span>
+            <span class="text-sm font-bold text-blue-200">Legitimidad + Cuidado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FUNIN Sub-teams interactive selector -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Member 1: Fatiha y Pedro -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 card-shadow flex flex-col justify-between hover:border-brand-300 transition">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-1 bg-red-50 text-red-700 text-xs font-bold rounded-lg border border-red-100">Fatiha y Pedro</span>
+              <span class="text-xs font-medium text-slate-400">Diseño & Dimensionamiento</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-800 mb-1">Perfil Técnico con Alto Estrés</h3>
+            <p class="text-xs text-slate-500 mb-3 leading-relaxed">
+              Múltiples proyectos simultáneos. Manifiestan irritabilidad, urgencia constante y sensación de desbordamiento.
+            </p>
+            <div class="p-3 bg-slate-50 rounded-xl space-y-2 mb-4 border border-slate-100 text-xs">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Estilo que NO debes usar:</span>
+                <span class="font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded">Ejemplar / Marcapasos</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Exigir más rapidez o corregirles tú mismo aumentará la irritabilidad y el colapso.</p>
+              <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+                <span class="text-slate-500">Estilos recomendados:</span>
+                <span class="font-bold text-brand-700 bg-blue-50 px-2 py-0.5 rounded">Orientativo + Afiliativo</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Tu estrategia de liderazgo con ellos:</label>
+            <textarea class="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none" rows="2" placeholder="Ej: Filtrar demandas de clientes, clarificar prioridades y validar su esfuerzo emocional..."></textarea>
+          </div>
+        </div>
+
+        <!-- Member 2: Laura, Sofie y Juan -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 card-shadow flex flex-col justify-between hover:border-brand-300 transition">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded-lg border border-amber-100">Laura, Sofie y Juan</span>
+              <span class="text-xs font-medium text-slate-400">Técnicos de Inserción</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-800 mb-1">Compromiso y Sobrejornada</h3>
+            <p class="text-xs text-slate-500 mb-3 leading-relaxed">
+              Tienen discapacidad física. Muy comprometidos y responsables; sufren malestar por falta de condiciones con clientes y alargan su jornada.
+            </p>
+            <div class="p-3 bg-slate-50 rounded-xl space-y-2 mb-4 border border-slate-100 text-xs">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Estilo que NO debes usar:</span>
+                <span class="font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded">Coercitivo</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Culpabilizar o exigir rigidez horaria sin resolver las barreras físicas en clientes desmotivaría.</p>
+              <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+                <span class="text-slate-500">Estilos recomendados:</span>
+                <span class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">Afiliativo + Democrático</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Tu estrategia de liderazgo con ellos:</label>
+            <textarea class="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none" rows="2" placeholder="Ej: Escuchar barreras con clientes (democrático), cuidar su salud (cuidado colectivo) y renegociar plazos..."></textarea>
+          </div>
+        </div>
+
+        <!-- Member 3: Julia -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 card-shadow flex flex-col justify-between hover:border-brand-300 transition">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-lg border border-purple-100">Julia</span>
+              <span class="text-xs font-medium text-slate-400">Coordinadora Inserción</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-800 mb-1">Palanca Clave y Autoestima</h3>
+            <p class="text-xs text-slate-500 mb-3 leading-relaxed">
+              Siempre dispuesta a ayudar y orientada al equipo. Hace que los proyectos salgan, pero <em>infravalora su capacidad de liderazgo</em>.
+            </p>
+            <div class="p-3 bg-slate-50 rounded-xl space-y-2 mb-4 border border-slate-100 text-xs">
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Oportunidad de Oro:</span>
+                <span class="font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded">Empoderar y Delegar</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Es tu aliada natural. Requiere que le muestres su valor para que asuma liderazgo formal.</p>
+              <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+                <span class="text-slate-500">Estilos recomendados:</span>
+                <span class="font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded">Formativo (Coach) + Afiliativo</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Tu estrategia de liderazgo con Julia:</label>
+            <textarea class="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none" rows="2" placeholder="Ej: Sesiones de mentoring 1a1 (formativo), reconocer su impacto y delegar atribuciones formales..."></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action call to go to report synthesis -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-xs text-slate-600">
+          <strong>¿Has reflexionado sobre la reunión inicial y el video de 2 minutos (Punto 5)?</strong>
+          <p class="text-slate-500">Recuerda que en el video debes transmitir este estilo (cálido, claro en la visión, empático y estructurado).</p>
+        </div>
+        <button id="btnIrInforme" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs rounded-xl transition shadow">
+          <span>Generar Síntesis para el Documento del Reto</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ================= TAB 5: INFORME Y SÍNTESIS ================= -->
+    <section id="tab-informe" class="tab-content hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 card-shadow">
+        
+        <div class="sm:flex sm:items-center sm:justify-between border-b border-slate-100 pb-5">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Borrador de Respuestas Estructuradas (Sección 2 del Reto)</h2>
+            <p class="text-xs text-slate-500 mt-1">
+              Esta sección compila tus resultados y te ofrece una redacción base con rigor académico lista para editar y transferir a tu documento Word/PDF.
+            </p>
+          </div>
+          <div class="mt-4 sm:mt-0 flex gap-2">
+            <button id="btnCopyReport" class="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl transition shadow">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+              <span>Copiar al Portapapeles</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Subsections corresponding to Reto 1 questions -->
+        <div class="mt-6 space-y-6" id="reportPreviewContent">
+          
+          <!-- 2.1 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-bold text-slate-900">2.1. Resultados del Test de Liderazgo (Goleman) y Comentario Crítico</h3>
+              <span class="text-[11px] text-slate-400 font-medium">1,5 pts en rúbrica global</span>
+            </div>
+            <div id="txtReport2_1" class="text-xs text-slate-700 leading-relaxed space-y-2 bg-white p-3 rounded-lg border border-slate-100">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- 2.2 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-bold text-slate-900">2.2. Estilos Adecuados para FUNIN y Reflexión sobre Estilo Predominante</h3>
+              <span class="text-[11px] text-slate-400 font-medium">Lectura Goleman (HBR)</span>
+            </div>
+            <div id="txtReport2_2" class="text-xs text-slate-700 leading-relaxed space-y-2 bg-white p-3 rounded-lg border border-slate-100">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- 2.3 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-bold text-slate-900">2.3. Contraste de Percepción Externa (Feedback 360° / Colaboradores)</h3>
+              <span class="text-[11px] text-slate-400 font-medium">Puntos Ciegos y Autoconciencia</span>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-slate-100 space-y-2">
+              <p class="text-xs text-slate-500 italic">Espacio para incorporar lo que te han comentado compañeros o colaboradores sobre tu estilo:</p>
+              <textarea id="txtFeedback360" class="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-brand-500 focus:outline-none" rows="3" placeholder="Al consultar con antiguos compañeros de Recursos Humanos, coinciden en que tiendo a... lo cual opino que concuerda / difiere con mis resultados debido a..."></textarea>
+            </div>
+          </div>
+
+          <!-- 2.4 -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-bold text-slate-900">2.4. Impacto en los 6 Impulsores del Clima Organizacional</h3>
+              <span class="text-[11px] text-slate-400 font-medium">Flexibilidad, Responsabilidad, Estándares, Recompensas, Claridad, Compromiso</span>
+            </div>
+            <div id="txtReport2_4" class="text-xs text-slate-700 leading-relaxed space-y-2 bg-white p-3 rounded-lg border border-slate-100">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Academic References Accordion -->
+        <div class="mt-6 pt-4 border-t border-slate-100">
+          <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Citas Académicas Sugeridas (Normas APA 7ª Edición)</h4>
+          <ul class="text-xs text-slate-600 space-y-1.5 font-mono bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <li>• Goleman, D. (2005). Liderazgo que obtiene resultados. <em>Harvard Business Review América Latina</em>, 83(11), 26-37.</li>
+            <li>• Whetten, D. A., & Cameron, K. S. (2016). <em>Desarrollo de habilidades directivas</em> (9.ª ed.). Pearson Educación.</li>
+            <li>• Chamberlain, L. (2020). Del autocuidado al cuidado colectivo. <em>Sur - Revista Internacional de Derechos Humanos</em>, 17(30), 223-234.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <div id="helpModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
+        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <span>🎓</span> Guía para el Alumnado • Reto 1
+        </h3>
+        <button id="btnCloseModal" class="text-slate-400 hover:text-slate-600 text-lg font-bold p-1">&times;</button>
+      </div>
+      <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+        <p><strong>Propósito de esta plataforma interactiva:</strong> Esta herramienta digital ha sido concebida por el equipo docente de <em>Habilidades directivas, liderazgo y formación de portavoces</em> para sustituir las antiguas hojas de cálculo estáticas y permitirte:</p>
+        <ol class="list-decimal list-inside space-y-1.5 pl-2 font-medium text-slate-700">
+          <li><strong>Visualizar tu perfil:</strong> Mapear en un radar tus seis estilos de liderazgo identificados por Daniel Goleman.</li>
+          <li><strong>Calcular el clima:</strong> Observar cuantitativamente cómo afectará tu combinación de liderazgo a la flexibilidad, responsabilidad, estándares, recompensas, claridad y compromiso de tu equipo.</li>
+          <li><strong>Aplicar al Caso FUNIN:</strong> Salir de la teoría abstracta y diseñar acciones concretas para Pedro, Fatiha, Laura, Sofie, Juan y Julia.</li>
+          <li><strong>Preparar la memoria de 4 páginas:</strong> Obtener una síntesis conceptual sólida citando a Goleman y Whetten & Cameron.</li>
+        </ol>
+        <div class="p-3 bg-blue-50 rounded-xl text-brand-900 border border-blue-200 mt-3">
+          <strong>Recordatorio de evaluación:</strong> Este análisis cubre el <em>Apartado 2: Estilo de Liderazgo (1,5 puntos)</em> y sienta las bases conceptuales para la grabación del video de presentación de 2 minutos (2,5 puntos).
+        </div>
+      </div>
+      <div class="mt-5 text-right">
+        <button id="btnCloseModalBtn" class="px-5 py-2 bg-brand-600 text-white rounded-xl text-xs font-semibold hover:bg-brand-700 transition">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-50">
+    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    <span id="toastMsg">Contenido copiado con éxito</span>
+  </div>
+
+  <script>
+    // State management for leadership scores
+    const state = {
+      coercitivo: 42,
+      orientativo: 85,
+      afiliativo: 78,
+      democratico: 72,
+      ejemplar: 65,
+      formativo: 80
+    };
+
+    // Empirical correlation matrix from Goleman / Hay McBer
+    const golemanMatrix = {
+      coercitivo:   { flex: -0.28, resp: -0.37, est: 0.02,  rec: -0.18, cla: -0.11, com: -0.13, general: -0.26 },
+      orientativo:  { flex: 0.32,  resp: 0.21,  est: 0.38,  rec: 0.54,  cla: 0.44,  com: 0.35,  general: 0.54 },
+      afiliativo:   { flex: 0.27,  resp: 0.16,  est: -0.31, rec: 0.48,  cla: 0.37,  com: 0.34,  general: 0.46 },
+      democratico:  { flex: 0.28,  resp: 0.23,  est: 0.22,  rec: 0.42,  cla: 0.35,  com: 0.26,  general: 0.43 },
+      ejemplar:     { flex: -0.07, resp: 0.04,  est: -0.27, rec: -0.29, cla: -0.28, com: -0.20, general: -0.25 },
+      formativo:    { flex: 0.17,  resp: 0.08,  est: 0.39,  rec: 0.43,  cla: 0.38,  com: 0.27,  general: 0.42 }
+    };
+
+    // Chart instances
+    let radarChart = null;
+    let climaBarChart = null;
+
+    // DOM Elements
+    const inputs = {
+      coercitivo: document.getElementById('input-coercitivo'),
+      orientativo: document.getElementById('input-orientativo'),
+      afiliativo: document.getElementById('input-afiliativo'),
+      democratico: document.getElementById('input-democratico'),
+      ejemplar: document.getElementById('input-ejemplar'),
+      formativo: document.getElementById('input-formativo')
+    };
+
+    const values = {
+      coercitivo: document.getElementById('val-coercitivo'),
+      orientativo: document.getElementById('val-orientativo'),
+      afiliativo: document.getElementById('val-afiliativo'),
+      democratico: document.getElementById('val-democratico'),
+      ejemplar: document.getElementById('val-ejemplar'),
+      formativo: document.getElementById('val-formativo')
+    };
+
+    // Toast helper
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    function setupTabs() {
+      const tabButtons = document.querySelectorAll('.nav-tab');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab');
+
+          tabButtons.forEach(b => {
+            b.classList.remove('active-tab', 'text-brand-600', 'border-brand-600');
+            b.classList.add('text-slate-500', 'border-transparent');
+            b.querySelector('span').classList.remove('bg-brand-600', 'text-white');
+            b.querySelector('span').classList.add('bg-slate-300', 'text-slate-700');
+          });
+
+          btn.classList.add('active-tab', 'text-brand-600', 'border-brand-600');
+          btn.classList.remove('text-slate-500', 'border-transparent');
+          btn.querySelector('span').classList.add('bg-brand-600', 'text-white');
+          btn.querySelector('span').classList.remove('bg-slate-300', 'text-slate-700');
+
+          tabContents.forEach(c => {
+            if (c.id === target) {
+              c.classList.remove('hidden');
+              c.classList.add('block');
+            } else {
+              c.classList.remove('block');
+              c.classList.add('hidden');
+            }
+          });
+
+          // Trigger chart updates when visible
+          if (target === 'tab-radar') {
+            setTimeout(renderRadarChart, 50);
+          } else if (target === 'tab-clima') {
+            setTimeout(renderClimaChart, 50);
+          } else if (target === 'tab-informe') {
+            updateReportOutputs();
+          }
+        });
+      });
+
+      // Quick jumps
+      document.getElementById('btnIrDiagnostico')?.addEventListener('click', () => {
+        document.querySelector('[data-tab="tab-radar"]').click();
+      });
+      document.getElementById('btnIrClima')?.addEventListener('click', () => {
+        document.querySelector('[data-tab="tab-clima"]').click();
+      });
+      document.getElementById('btnIrFunin')?.addEventListener('click', () => {
+        document.querySelector('[data-tab="tab-funin"]').click();
+      });
+      document.getElementById('btnIrInforme')?.addEventListener('click', () => {
+        document.querySelector('[data-tab="tab-informe"]').click();
+      });
+    }
+
+    function setupInputs() {
+      Object.keys(inputs).forEach(key => {
+        inputs[key].addEventListener('input', (e) => {
+          const val = parseInt(e.target.value);
+          state[key] = val;
+          values[key].textContent = val + '%';
+          updateKPIs();
+        });
+      });
+
+      // Presets
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const type = btn.getAttribute('data-preset');
+          if (type === 'resonante') {
+            setScores({ coercitivo: 25, orientativo: 88, afiliativo: 82, democratico: 78, ejemplar: 45, formativo: 85 });
+            showToast('Perfil cargado: Líder Resonante Multiestilo');
+          } else if (type === 'tecnico') {
+            setScores({ coercitivo: 40, orientativo: 50, afiliativo: 45, democratico: 40, ejemplar: 92, formativo: 35 });
+            showToast('Perfil cargado: Promoción Técnica (Exceso de Estilo Ejemplar)');
+          } else if (type === 'protector') {
+            setScores({ coercitivo: 15, orientativo: 40, afiliativo: 95, democratico: 70, ejemplar: 30, formativo: 50 });
+            showToast('Perfil cargado: Afiliativo Protector');
+          }
+        });
+      });
+
+      document.getElementById('btnQuickDemo')?.addEventListener('click', () => {
+        setScores({ coercitivo: 30, orientativo: 86, afiliativo: 80, democratico: 75, ejemplar: 55, formativo: 82 });
+        showToast('Perfil de Referencia Cargado');
+      });
+    }
+
+    function setScores(newScores) {
+      Object.keys(newScores).forEach(key => {
+        state[key] = newScores[key];
+        inputs[key].value = newScores[key];
+        values[key].textContent = newScores[key] + '%';
+      });
+      updateKPIs();
+      if (!document.getElementById('tab-radar').classList.contains('hidden')) {
+        renderRadarChart();
+      }
+      if (!document.getElementById('tab-clima').classList.contains('hidden')) {
+        renderClimaChart();
+      }
+    }
+
+    function updateKPIs() {
+      const resonantesAvg = ((state.orientativo + state.afiliativo + state.democratico + state.formativo) / 4).toFixed(1);
+      const disonantesAvg = ((state.coercitivo + state.ejemplar) / 2).toFixed(1);
+
+      document.getElementById('kpi-resonantes').textContent = resonantesAvg + '%';
+      document.getElementById('kpi-disonantes').textContent = disonantesAvg + '%';
+
+      // Find predominant
+      let maxKey = 'orientativo';
+      let maxVal = -1;
+      Object.keys(state).forEach(k => {
+        if (state[k] > maxVal) {
+          maxVal = state[k];
+          maxKey = k;
+        }
+      });
+
+      const styleNames = {
+        coercitivo: 'Coercitivo',
+        orientativo: 'Orientativo / Visionario',
+        afiliativo: 'Afiliativo',
+        democratico: 'Democrático',
+        ejemplar: 'Ejemplar / Marcapasos',
+        formativo: 'Formativo / Coach'
+      };
+
+      const styleDescriptions = {
+        coercitivo: 'Exiges conformidad rápida. Útil sólo en urgencias operativas extremas en FUNIN, pero peligroso si se utiliza con personas como Laura o Fatiha que ya padecen sobrecarga.',
+        orientativo: 'Capacidad para fijar una visión compartida e ilusionante. Esencial en FUNIN para dotar de sentido ético y estratégico la labor ante clientes.',
+        afiliativo: 'Priorizas las personas y la armonía relacional. Vital para reparar el desgaste emocional y conectar con los técnicos con discapacidad física.',
+        democratico: 'Fomentas la participación y el consenso. Te ayuda a escuchar las dificultades reales de la plantilla en las visitas con clientes.',
+        ejemplar: 'Marcas altos estándares haciendo tú mismo el trabajo. Debes tener extrema precaución al ascender: podrías caer en microgestión.',
+        formativo: 'Ayudas a las personas a crecer a largo plazo. Es la clave para acompañar a Julia y fortalecer su autoconfianza directiva.'
+      };
+
+      document.getElementById('badgeDominancia').textContent = `${styleNames[maxKey]} Dominante (${maxVal}%)`;
+      document.getElementById('txt-predominante-title').textContent = `${styleNames[maxKey]} (${maxVal}%)`;
+      document.getElementById('txt-predominante-desc').textContent = styleDescriptions[maxKey];
+
+      // Tags of styles in repertory (>65%)
+      const tagContainer = document.getElementById('tagRepertorio');
+      tagContainer.innerHTML = '';
+      let domCount = 0;
+      Object.keys(state).forEach(k => {
+        if (state[k] >= 65) {
+          domCount++;
+          const span = document.createElement('span');
+          span.className = 'px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-semibold border border-slate-200';
+          span.textContent = `✔ ${styleNames[k]}`;
+          tagContainer.appendChild(span);
+        }
+      });
+      if (domCount < 4) {
+        const warn = document.createElement('span');
+        warn.className = 'px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold';
+        warn.textContent = `⚠ Dominas ${domCount}/4 estilos clave según Goleman`;
+        tagContainer.appendChild(warn);
+      } else {
+        const ok = document.createElement('span');
+        ok.className = 'px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold';
+        ok.textContent = `★ Repertorio amplio (${domCount} estilos activos)`;
+        tagContainer.appendChild(ok);
+      }
+    }
+
+    function renderRadarChart() {
+      const ctx = document.getElementById('radarChart').getContext('2d');
+      const dataValues = [
+        state.coercitivo,
+        state.orientativo,
+        state.afiliativo,
+        state.democratico,
+        state.ejemplar,
+        state.formativo
+      ];
+
+      // Benchmark: Multistyle Leader
+      const benchmarkValues = [30, 85, 80, 75, 45, 80];
+
+      if (radarChart) {
+        radarChart.data.datasets[0].data = dataValues;
+        radarChart.update();
+        return;
+      }
+
+      radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['Coercitivo', 'Orientativo', 'Afiliativo', 'Democrático', 'Ejemplar', 'Formativo'],
+          datasets: [
+            {
+              label: 'Tu Perfil Diagnosticado',
+              data: dataValues,
+              backgroundColor: 'rgba(37, 99, 235, 0.25)',
+              borderColor: 'rgba(37, 99, 235, 0.9)',
+              pointBackgroundColor: 'rgba(37, 99, 235, 1)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgba(37, 99, 235, 1)',
+              borderWidth: 2.5
+            },
+            {
+              label: 'Ideal Multiestilo Resonante',
+              data: benchmarkValues,
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              borderColor: 'rgba(16, 185, 129, 0.6)',
+              borderDash: [4, 4],
+              pointBackgroundColor: 'rgba(16, 185, 129, 0.8)',
+              borderWidth: 1.5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: '#e2e8f0' },
+              grid: { color: '#e2e8f0' },
+              suggestedMin: 0,
+              suggestedMax: 100,
+              ticks: {
+                stepSize: 20,
+                backdropColor: 'transparent',
+                font: { size: 10 }
+              },
+              pointLabels: {
+                font: { size: 11, weight: '600', family: '"Plus Jakarta Sans", sans-serif' },
+                color: '#334155'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                font: { size: 11, family: '"Plus Jakarta Sans", sans-serif' }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function calculateClimateScores() {
+      const drivers = ['flex', 'resp', 'est', 'rec', 'cla', 'com'];
+      const results = {};
+
+      drivers.forEach(d => {
+        let sum = 0;
+        let totalWeight = 0;
+        Object.keys(state).forEach(style => {
+          const scoreNormalized = (state[style] / 100);
+          const correlation = golemanMatrix[style][d];
+          sum += scoreNormalized * correlation;
+          totalWeight += 1;
+        });
+        // Multiply for display scale (-100 to +100 index)
+        results[d] = Math.round((sum / 6) * 180);
+      });
+
+      return results;
+    }
+
+    function renderClimaChart() {
+      const climate = calculateClimateScores();
+      const ctx = document.getElementById('climaBarChart').getContext('2d');
+      const labels = ['Flexibilidad', 'Responsabilidad', 'Estándares', 'Recompensas', 'Claridad', 'Compromiso'];
+      const dataArr = [
+        climate.flex,
+        climate.resp,
+        climate.est,
+        climate.rec,
+        climate.cla,
+        climate.com
+      ];
+
+      const bgColors = dataArr.map(v => v >= 0 ? 'rgba(16, 185, 129, 0.75)' : 'rgba(239, 68, 68, 0.75)');
+      const borderColors = dataArr.map(v => v >= 0 ? '#059669' : '#dc2626');
+
+      if (climaBarChart) {
+        climaBarChart.data.datasets[0].data = dataArr;
+        climaBarChart.data.datasets[0].backgroundColor = bgColors;
+        climaBarChart.data.datasets[0].borderColor = borderColors;
+        climaBarChart.update();
+        updateClimateDriverCards(climate);
+        return;
+      }
+
+      climaBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Índice de Impacto en Clima (-100 a +100)',
+            data: dataArr,
+            backgroundColor: bgColors,
+            borderColor: borderColors,
+            borderWidth: 1.5,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              min: -50,
+              max: 60,
+              grid: { color: '#f1f5f9' },
+              ticks: { font: { size: 10 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 10, weight: '600' } }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+
+      updateClimateDriverCards(climate);
+    }
+
+    function updateClimateDriverCards(climate) {
+      const list = document.getElementById('climaDriversList');
+      list.innerHTML = '';
+
+      const descriptions = [
+        { key: 'flex', name: 'Flexibilidad', desc: 'Libertad del equipo para innovar sin trabas burocráticas' },
+        { key: 'resp', name: 'Responsabilidad', desc: 'Sentimiento de delegación y autonomía ante las tareas' },
+        { key: 'est', name: 'Estándares', desc: 'Nivel de exigencia y foco en la calidad del servicio' },
+        { key: 'rec', name: 'Recompensas', desc: 'Feedback constructivo y reconocimiento explícito' },
+        { key: 'cla', name: 'Claridad', desc: 'Comprensión nítida de la misión y prioridades estratégicas' },
+        { key: 'com', name: 'Compromiso', desc: 'Sentimiento de orgullo y lealtad hacia la meta común' }
+      ];
+
+      descriptions.forEach(item => {
+        const val = climate[item.key];
+        const isPos = val >= 0;
+        const div = document.createElement('div');
+        div.className = 'p-2.5 rounded-xl border flex items-center justify-between ' + 
+          (isPos ? 'bg-emerald-50/40 border-emerald-100' : 'bg-rose-50/40 border-rose-100');
+        div.innerHTML = `
+          <div>
+            <div class="font-bold text-slate-800 flex items-center gap-1.5">
+              <span>${item.name}</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.2 rounded ${isPos ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                ${val > 0 ? '+' : ''}${val}
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-500">${item.desc}</p>
+          </div>
+          <span class="text-xs font-bold ${isPos ? 'text-emerald-600' : 'text-rose-600'}">
+            ${isPos ? '▲ Favorable' : '▼ Riesgo'}
+          </span>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function updateReportOutputs() {
+      const clim = calculateClimateScores();
+      
+      // 2.1 Content
+      const p2_1 = `
+        <p>A partir del cuestionario de estilos de liderazgo fundamentado en la investigación de Daniel Goleman (2005), mis puntuaciones reflejan un perfil caracterizado por: <strong>Orientativo (${state.orientativo}%)</strong>, <strong>Afiliativo (${state.afiliativo}%)</strong>, <strong>Democrático (${state.democratico}%)</strong>, <strong>Formativo (${state.formativo}%)</strong>, <strong>Ejemplar (${state.ejemplar}%)</strong> y <strong>Coercitivo (${state.coercitivo}%)</strong>.</p>
+        <p>Estos resultados demuestran una alineación sólida con los cuatro estilos que Goleman identifica como generadores de un impacto altamente positivo en el clima laboral. No obstante, destaca la necesidad de controlar el estilo ejemplar para evitar asumir tareas técnicas directas que desautoricen la labor del equipo.</p>
+      `;
+      document.getElementById('txtReport2_1').innerHTML = p2_1;
+
+      // 2.2 Content
+      const p2_2 = `
+        <p><strong>Adecuación al Caso FUNIN:</strong> Para liderar a un equipo compuesto por seis antiguos compañeros con problemáticas heterogéneas, se requiere un liderazgo contingente y flexible:</p>
+        <ul class="list-disc list-inside space-y-1 pl-1">
+          <li><strong>Con Fatiha y Pedro (estrés y saturación):</strong> Aplicar el <em>estilo Orientativo</em> para clarificar qué proyectos son prioritarios y filtrar demandas externas, combinado con el <em>Afiliativo</em> para reducir el estrés psicosocial.</li>
+          <li><strong>Con Laura, Sofie y Juan (discapacidad física y sobrejornada):</strong> Aplicar el <em>estilo Democrático y Afiliativo</em>, escuchando activamente sus dificultades logísticas con los clientes y estableciendo medidas de autocuidado colectivo (Chamberlain, 2020) que eviten la prolongación indebida de jornada.</li>
+          <li><strong>Con Julia (coordinadora con liderazgo infravalorado):</strong> Aplicar el <em>estilo Formativo (Coaching)</em> para empoderarla formalmente y delegar responsabilidades ejecutivas.</li>
+        </ul>
+      `;
+      document.getElementById('txtReport2_2').innerHTML = p2_2;
+
+      // 2.4 Content
+      const p2_4 = `
+        <p>De acuerdo con el modelo de George Litwin y Richard Stringer citado por Goleman (2005), mi perfil genera el siguiente impacto proyectado en los seis impulsores:</p>
+        <ul class="list-disc list-inside space-y-1 pl-1">
+          <li><strong>Claridad (+${clim.cla}) y Recompensas (+${clim.rec}):</strong> Son las dimensiones más fortalecidas gracias a la tracción conjunta de los estilos orientativo y afiliativo, resolviendo la falta de rumbo y reconociendo el esfuerzo del equipo.</li>
+          <li><strong>Flexibilidad (+${clim.flex}) y Compromiso (+${clim.com}):</strong> Fomentados por la apertura a la participación democrática y la confianza interpersonal, reduciendo la rigidez formal.</li>
+          <li><strong>Estándares (+${clim.est}) y Responsabilidad (+${clim.resp}):</strong> Se mantienen en rangos de equilibrio, evitando la trampa del microcontrol punitivo.</li>
+        </ul>
+      `;
+      document.getElementById('txtReport2_4').innerHTML = p2_4;
+    }
+
+    function setupModalAndClipboard() {
+      const modal = document.getElementById('helpModal');
+      document.getElementById('btnHelpModal')?.addEventListener('click', () => modal.classList.remove('hidden'));
+      document.getElementById('btnCloseModal')?.addEventListener('click', () => modal.classList.add('hidden'));
+      document.getElementById('btnCloseModalBtn')?.addEventListener('click', () => modal.classList.add('hidden'));
+
+      // Copy text to clipboard
+      document.getElementById('btnCopyReport')?.addEventListener('click', () => {
+        const sec2_1 = document.getElementById('txtReport2_1').innerText;
+        const sec2_2 = document.getElementById('txtReport2_2').innerText;
+        const sec2_3 = document.getElementById('txtFeedback360').value || "No se ha añadido texto en feedback 360 aún.";
+        const sec2_4 = document.getElementById('txtReport2_4').innerText;
+
+        const fullText = `========================================================\n` +
+          `SECCIÓN 2: ESTILO DE LIDERAZGO (RETO 1 - CASO FUNIN)\n` +
+          `Máster de Comunicación Corporativa - UOC\n` +
+          `========================================================\n\n` +
+          `2.1 RESULTADOS DEL TEST Y COMENTARIO CRÍTICO:\n${sec2_1}\n\n` +
+          `2.2 ESTILOS PARA FUNIN Y ESTILO PREDOMINANTE:\n${sec2_2}\n\n` +
+          `2.3 CONTRASTE CON FEEDBACK 360° / COLABORADORES:\n${sec2_3}\n\n` +
+          `2.4 IMPACTO EN LOS 6 IMPULSORES DEL CLIMA (GOLEMAN):\n${sec2_4}\n\n` +
+          `REFERENCIAS:\n` +
+          `- Goleman, D. (2005). Liderazgo que obtiene resultados. Harvard Business Review América Latina, 83(11), 26-37.\n` +
+          `- Whetten, D. A., & Cameron, K. S. (2016). Desarrollo de habilidades directivas (9.ª ed.). Pearson.\n` +
+          `- Chamberlain, L. (2020). Del autocuidado al cuidado colectivo. Sur, 17(30), 223-234.\n`;
+
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = fullText;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        try {
+          document.execCommand('copy');
+          showToast('¡Texto copiado al portapapeles!');
+        } catch (err) {
+          showToast('Error al copiar el texto');
+        }
+        document.body.removeChild(tempTextArea);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setupTabs();
+      setupInputs();
+      setupModalAndClipboard();
+      updateKPIs();
+      // Pre-render
+      setTimeout(renderRadarChart, 100);
+      setTimeout(renderClimaChart, 200);
+    });
+  </script>
+</body>
+</html>
